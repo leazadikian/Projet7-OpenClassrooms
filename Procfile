@@ -1,1 +1,1 @@
-web: gunicorn prediction_app_test:app
+web: uvicorn prediction_app_test:app
