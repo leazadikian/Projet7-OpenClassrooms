@@ -1,2 +1,2 @@
 api: uvicorn prediction_app:app --reload --host=0.0.0.0 --port=${PORT:-5000}
-dash: streamlit run dashboard.py
+dash: streamlit run dashboard.py --server.enableCORS false --server.port $PORT
