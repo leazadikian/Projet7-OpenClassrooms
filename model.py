@@ -20,7 +20,7 @@ description = pd.read_csv("HomeCredit_columns_description.csv",
 
 
 # Chargement du modèle MLflow
-logged_model = 'runs:/b8b6c9ae221242408a65c79dd1f22f11/model'
+#logged_model = 'runs:/b8b6c9ae221242408a65c79dd1f22f11/model'
 # Load model as a PyFuncModel.
 #loaded_model = mlflow.pyfunc.load_model(logged_model)
 #loaded_model = mlflow.xgboost.load_model(logged_model)
