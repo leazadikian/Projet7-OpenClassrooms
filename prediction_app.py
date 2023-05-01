@@ -25,7 +25,7 @@ async def root():
 
 @app.get('/name')
 def get_name():
-    name_2 = predict_test()
+    name_2 = "test"
     return {'message': name_2}
 
 
