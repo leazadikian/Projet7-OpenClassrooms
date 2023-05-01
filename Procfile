@@ -1,1 +1,2 @@
-web : uvicorn prediction_app:app --host=127.0.0.1 --port=8000
+api : uvicorn prediction_app:app --reload --host=0.0.0.0 --port=8000
+web: sh setup_streamlit.sh && streamlit run dashboard.py
