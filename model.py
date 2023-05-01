@@ -6,6 +6,7 @@ from PIL import Image
 import shap
 import matplotlib.pyplot as plt
 import seaborn as sns
+import pickle
 
 # Chargement des données des clients depuis un fichier CSV
 prod_data = data = pd.read_csv("application_test.csv") # base de clients production
@@ -22,8 +23,8 @@ description = pd.read_csv("HomeCredit_columns_description.csv",
 logged_model = 'runs:/b8b6c9ae221242408a65c79dd1f22f11/model'
 # Load model as a PyFuncModel.
 #loaded_model = mlflow.pyfunc.load_model(logged_model)
-loaded_model = mlflow.xgboost.load_model(logged_model)
-
+#loaded_model = mlflow.xgboost.load_model(logged_model)
+loaded_model = pickle.load(open("model.pck","rb"))
 
 # Définition des features
 def features_def():
