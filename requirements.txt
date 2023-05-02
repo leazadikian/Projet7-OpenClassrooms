@@ -10,3 +10,4 @@ shap==0.41.0
 streamlit==1.21.0
 uvicorn==0.22.0
 xgboost==1.7.5
+ipython==8.13.1
