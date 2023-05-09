@@ -1,61 +1,69 @@
 # Importation des librairies
 from fastapi import FastAPI
+from fastapi.responses import StreamingResponse
+from io import StringIO
 import uvicorn
 import pandas as pd
 import mlflow
 from pydantic import BaseModel
+from typing import Union
 
 from model import *
-
-
-# Chargement du modèle MLflow ---> Dans app.py
-# model = mlflow.sklearn.load_model("C:\\Users\\lea\\Documents\\PROJET7\\mlflow_model")
-
 
 # Création de l'application FastAPI
 app = FastAPI()
 
-class predirectionRequestObject(BaseModel):
-    client_id: float
+class requestObject(BaseModel):
+    client_id: Union[float, None] = None
+    feat_number : Union[int, None] = None
+    feat_name : Union[str, None] = None
 
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
 
-
-@app.get('/name')
-def get_name():
-    name_2 = "test"
-    return {'message': name_2}
-
-
 # Définition du endpoint de prédiction pour la décision d'octroi de crédit
-# Expose the prediction functionality, make a prediction from the passed
-# JSON data and return the predicted decision the confidence
+# Retourne un JSON contenant la prediction et la probabilité.
 @app.post('/predict_credit_decision')
-async def predict_credit_decision(data: predirectionRequestObject):
-    client_id = data.client_id
-    proba, prediction = predict(client_id)
+async def predict_credit_decision(data: requestObject):
+    proba, prediction = predict(data.client_id)
     return {"result" : prediction, "proba" : proba}
 
-    # client_data_filtered = clients_data.loc[clients_data['SK_ID_CURR']==client_id]
-    # sexe = client_data_filtered["CODE_GENDER"].values[0]
-    # Retourner la prédiction dans la réponse avec l'identifiant du client
-    # return {"sexe": sexe}
-
 # Définition du endpoint de retour de la liste des clients
+# Retourne la liste des clients
 @app.post('/get_clients_list')
 async def get_clients_list():
     return {"clients_list" : clients_id_list()}
 
 # Définition du endpoint pour recuperer les informations sur un client
 @app.post('/get_client_data')
-async def get_client_data(data: predirectionRequestObject):
+async def get_client_data(data: requestObject):
     return {"client_data" : client_info(data.client_id)}
 
 # Définition du endpoint pour recuperer les informations du crédit
 @app.post('/get_credit_info')
-async def get_credit_info(data: predirectionRequestObject):
+async def get_credit_info(data: requestObject):
     return {"credit_info" : credit_info(data.client_id)}
 
-   
+# Définition du endpoint pour recuperer le graph SHAP waterfall
+@app.post('/get_shap_waterfall_chart')
+async def get_shap_waterfall_chart(data: requestObject):
+    image = shap_waterfall_chart(data.client_id, data.feat_number)
+    return {"base64_image" : image}
+
+# Définition du endpoint pour recuperer le graph SHAP waterfall
+@app.post('/get_shap_waterfall_chart_global')
+async def get_shap_waterfall_chart_global(data: requestObject):
+    image = shap_waterfall_chart_global(data.feat_number)
+    return {"base64_image" : image}
+
+# Définition du endpoint de retour de la défintion des features
+@app.post('/get_features_definition')
+async def get_features_definition():
+    return {"feature_definition" : features_def()}
+
+# Définition du endpoint pour recuperer le graph SHAP waterfall
+@app.post('/get_comparison_graph')
+async def get_comparison_graph(data: requestObject):
+    image = comparison_graph(data.client_id, data.feat_name)
+    return {"base64_image" : image}

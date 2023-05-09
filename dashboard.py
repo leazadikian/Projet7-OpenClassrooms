@@ -1,24 +1,28 @@
 import pandas as pd
 import streamlit as st
-import streamlit.components.v1 as components
 import requests
 import json
 import time
-
-from model import *
+from PIL import Image
+import base64
 
 # Chargement du logo Prêt à Dépenser
 logo_image = Image.open('logo_pret_a_depenser.png')
 
 
+
 #############################
 # FONCTIONS REQUÊTE A L'API #
 #############################
+
+base_url = "http://127.0.0.1:8000/"
+headers_request = {"Content-Type": "application/json"}
+
+@st.cache_data
 def request_prediction(client_id):
-    url_request = "http://127.0.0.1:8000/predict_credit_decision"
-    headers = {"Content-Type": "application/json"}
+    url_request = base_url + "predict_credit_decision"
     data_json = {"client_id" : client_id}
-    response = requests.request( method='POST', headers=headers, url=url_request, json=data_json)
+    response = requests.request( method='POST', headers=headers_request, url=url_request, json=data_json)
     
     if response.status_code != 200:
         raise Exception(
@@ -26,11 +30,11 @@ def request_prediction(client_id):
         
     return response.json()["proba"], response.json()["result"]
 
+@st.cache_data
 def request_client_data(client_id):
-    url_request = "http://127.0.0.1:8000/get_client_data"
-    headers = {"Content-Type": "application/json"}
+    url_request = base_url + "get_client_data"
     data_json = {"client_id" : client_id}
-    response = requests.request( method='POST', headers=headers, url=url_request, json=data_json)
+    response = requests.request( method='POST', headers=headers_request, url=url_request, json=data_json)
     
     if response.status_code != 200:
         raise Exception(
@@ -38,39 +42,83 @@ def request_client_data(client_id):
         
     return pd.DataFrame.from_dict(response.json()["client_data"])
 
+@st.cache_data
 def request_credit_info(client_id):
-    url_request = "http://127.0.0.1:8000/get_credit_info"
-    headers = {"Content-Type": "application/json"}
+    url_request = base_url + "get_credit_info"
     data_json = {"client_id" : client_id}
-    response = requests.request( method='POST', headers=headers, url=url_request, json=data_json)
+    response = requests.request( method='POST', headers=headers_request, url=url_request, json=data_json)
     
     if response.status_code != 200:
         raise Exception(
             "Request failed with status {}, {}".format(response.status_code, response.text))
         
     return pd.DataFrame.from_dict(response.json()["credit_info"])
-    
+
+@st.cache_data    
 def request_client_list():
-    url_request = "http://127.0.0.1:8000/get_clients_list"
-    #headers = {"Content-Type": "application/json"}
-    #data_json = {"client_id" : client_id}
-    response = requests.request( method='POST', url=url_request)
+    url_request = base_url + "get_clients_list"
+    response = requests.request( method='POST', headers=headers_request, url=url_request)
     
     if response.status_code != 200:
         raise Exception(
             "Request failed with status {}, {}".format(response.status_code, response.text))
     
-    return response.json()["clients_list"]
+    return [int(x) for x in response.json()["clients_list"]]
 
+@st.cache_data
+def request_feature_definition():
+    url_request = base_url + "get_features_definition"
+    response = requests.request( method='POST', headers=headers_request, url=url_request)
+    
+    if response.status_code != 200:
+        raise Exception(
+            "Request failed with status {}, {}".format(response.status_code, response.text))
+    
+    return response.json()["feature_definition"]
 
+@st.cache_data
+def request_shap_waterfall_chart(client_id, feat_number):
+    url_request = base_url + "get_shap_waterfall_chart"
+    data_json = {"client_id" : client_id, "feat_number" : feat_number}
+    response = requests.request( method='POST', headers=headers_request, url=url_request, json=data_json)
+    
+    if response.status_code != 200:
+        raise Exception(
+            "Request failed with status {}, {}".format(response.status_code, response.text))
+    
+    return response.json()["base64_image"]
+
+@st.cache_data
+def request_shap_waterfall_chart_global(feat_number):
+    url_request = base_url + "get_shap_waterfall_chart_global"
+    data_json = {"feat_number" : feat_number}
+    response = requests.request( method='POST', headers=headers_request, url=url_request, json=data_json)
+    
+    if response.status_code != 200:
+        raise Exception(
+            "Request failed with status {}, {}".format(response.status_code, response.text))
+    
+    return response.json()["base64_image"]
+
+@st.cache_data
+def request_comparison_chart(client_id, feat_name):
+    url_request = base_url + "get_comparison_graph"
+    data_json = {"client_id" : client_id, "feat_name" : feat_name}
+    response = requests.request( method='POST', headers=headers_request, url=url_request, json=data_json)
+    
+    if response.status_code != 200:
+        raise Exception(
+            "Request failed with status {}, {}".format(response.status_code, response.text))
+    
+    return response.json()["base64_image"]
 
 
 ########################
 # FONCTION PRINCIPALE #
 ########################
 def main():
-    PREDICTION_API = 'http://127.0.0.1:5000'
     
+    st.set_page_config(page_title='Prêt à Dépenser - Léa Zadikian', page_icon  = logo_image, layout = 'wide', initial_sidebar_state = 'auto')
     
     #########
     # TITRE #
@@ -133,24 +181,38 @@ def main():
         elif prediction == 0:
             st.success("Crédit accordé !")
             
- 
         
      # 2 # Affichage des features importance locale (explication de la prédiction)    
     if st.checkbox("**Afficher l'explication de la prédiction**"):
       
         # Sélection par l'utilisateur du nombre de features à afficher
-        feat_number = st.slider("* Sélectionner le nombre de paramètres souhaité pour expliquer la prédiction", 0, 30, 10)
+        feat_number = st.slider("* Sélectionner le nombre de paramètres souhaité pour expliquer la prédiction", 1, 30, 10)
         
-        with st.spinner('Chargement du graphique en cours...'):
+        col1, col2 = st.columns(2)
+        
+        #with col1.spinner('Chargement du graphique en cours...'):
+        col1.header("Client")
+        base64_image = request_shap_waterfall_chart(id_input,feat_number)
+        image = base64.b64decode(base64_image)
+        #col1.spinner('Chargement du graphique en cours...'):
+        col1.image(image)
+            
+        #with col2.spinner('Chargement du graphique en cours...'):
+        col2.header("Global")
+        base64_image = request_shap_waterfall_chart_global(feat_number)
+        image = base64.b64decode(base64_image)
+        #col2.spinner('Chargement du graphique en cours...'):
+        col2.image(image)
+        
+        #with st.spinner('Chargement du graphique en cours...'):
             # Affichage du graph summary_plot de shap ( explication d'une prédiction individuelle)
-            st.pyplot(prediction_SHAP_summary_plot(id_input,feat_number))
+            #st.pyplot(prediction_SHAP_summary_plot(id_input,feat_number))
         
-        with st.spinner('Chargement du graphique en cours...'):
-            # Affichage du graph watefall de shap ( explication d'une prédiction individuelle)
-            st.pyplot(prediction_SHAP_waterfall(id_input,feat_number))
-
-           
-    
+        #with st.spinner('Chargement du graphique en cours...'):
+            #base64_image = request_shap_waterfall_chart(id_input,feat_number)
+            #image = base64.b64decode(base64_image)
+            #st.image(image)
+  
     # 3 # Comparaison avec les autres clients
     if st.checkbox('**Comparer le client avec les autres clients**'):
         
@@ -162,23 +224,21 @@ def main():
                 "AMT_CREDIT"])
         
         with st.spinner('Chargement du graphique en cours...'):
-            fig=comparison_graph(id_input,feature_name)
-            st.pyplot(fig,use_container_width=True)
-
+            base64_image = request_comparison_chart(id_input,feature_name)
+            image = base64.b64decode(base64_image)
+            st.image(image)
             
             #fig, ax = plt.subplots(feature_name)
             #plt.title('Distribution du paramètre %s ' % feature_name)
             #sns.histplot( data=prod_data,x=feature_name)
-            #ax.axvline(int(infos_client["feature_name"].values / 365), color="green", linestyle='--')
-        
- 
-        
         
     # 4 # Définition des features
     if st.checkbox("Voir la définition des paramètres") :
-        feature = st.selectbox('Selectionner un paramètres…', features_def())
-        st.table(description.loc[description.index == feature][:1])
+        df_features = pd.DataFrame.from_dict(request_feature_definition())
+        features_name = sorted(df_features.index.unique().to_list())
 
+        feature = st.selectbox('Selectionner un paramètres…', features_name)
+        st.table(df_features.loc[df_features.index == feature][:1])
 
 if __name__ == '__main__':
     main()
