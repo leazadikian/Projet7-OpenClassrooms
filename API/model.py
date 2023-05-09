@@ -14,14 +14,14 @@ import base64
 
 # Les transformations appliquées aux données d'entrée
 def transform(df):
-    return pd.read_csv("../Data/test_df_imputed.csv")
+    return pd.read_csv("Data/test_df_imputed.csv")
 
 ###################################################
 #       CHARGEMENT DES DONNEES ET DU MODELE       #
 ###################################################
 
 # Chargement des données des clients depuis un fichier CSV
-prod_data = data = pd.read_csv("../Data/application_test.csv") # base de clients production
+prod_data = data = pd.read_csv("Data/application_test.csv") # base de clients production
 clients_data = transform(prod_data)
 # Pour test, data client de test déjà transformées. Pour finaliser le projet il faudra supprimer cet import de données. Ce ddf sera obtenu par transformation de "prod_data" 
 
@@ -29,13 +29,13 @@ feats = [f for f in clients_data.columns if f not in ['TARGET','SK_ID_CURR','SK_
 #client_data_wo_id = clients_data[feats]
 
 # Chargement depuis un fichier csv d'un dataframe contenant la description des colonnes
-colmumn_description_df = pd.read_csv("../Data/HomeCredit_columns_description.csv", usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')
+colmumn_description_df = pd.read_csv("Data/HomeCredit_columns_description.csv", usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')
 
 # Chargement du modèle MLflow
 #logged_model = 'runs:/b8b6c9ae221242408a65c79dd1f22f11/model'
 #loaded_model = mlflow.pyfunc.load_model(logged_model)
 #loaded_model = mlflow.xgboost.load_model(logged_model)
-loaded_model = pickle.load(open("model.pck","rb"))
+loaded_model = pickle.load(open("API/model.pck","rb"))
 
 ###################################################
 # FONCTION D'INFORMATION GENERALES SUR LE DATASET #
