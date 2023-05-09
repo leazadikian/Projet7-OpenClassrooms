@@ -182,7 +182,7 @@ def main():
             st.success("Crédit accordé !")
             
         
-     # 2 # Affichage des features importance locale (explication de la prédiction)    
+     # 2 # Affichage des features importance locale et globale (explication de la prédiction)    
     if st.checkbox("**Afficher l'explication de la prédiction**"):
       
         # Sélection par l'utilisateur du nombre de features à afficher
@@ -190,28 +190,16 @@ def main():
         
         col1, col2 = st.columns(2)
         
-        #with col1.spinner('Chargement du graphique en cours...'):
         col1.header("Client")
         base64_image = request_shap_waterfall_chart(id_input,feat_number)
         image = base64.b64decode(base64_image)
-        #col1.spinner('Chargement du graphique en cours...'):
         col1.image(image)
             
-        #with col2.spinner('Chargement du graphique en cours...'):
         col2.header("Global")
         base64_image = request_shap_waterfall_chart_global(feat_number)
         image = base64.b64decode(base64_image)
-        #col2.spinner('Chargement du graphique en cours...'):
         col2.image(image)
         
-        #with st.spinner('Chargement du graphique en cours...'):
-            # Affichage du graph summary_plot de shap ( explication d'une prédiction individuelle)
-            #st.pyplot(prediction_SHAP_summary_plot(id_input,feat_number))
-        
-        #with st.spinner('Chargement du graphique en cours...'):
-            #base64_image = request_shap_waterfall_chart(id_input,feat_number)
-            #image = base64.b64decode(base64_image)
-            #st.image(image)
   
     # 3 # Comparaison avec les autres clients
     if st.checkbox('**Comparer le client avec les autres clients**'):
@@ -228,10 +216,7 @@ def main():
             image = base64.b64decode(base64_image)
             st.image(image)
             
-            #fig, ax = plt.subplots(feature_name)
-            #plt.title('Distribution du paramètre %s ' % feature_name)
-            #sns.histplot( data=prod_data,x=feature_name)
-        
+           
     # 4 # Définition des features
     if st.checkbox("Voir la définition des paramètres") :
         df_features = pd.DataFrame.from_dict(request_feature_definition())
