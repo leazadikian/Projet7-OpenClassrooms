@@ -7,7 +7,7 @@ from PIL import Image
 import base64
 
 # Chargement du logo Prêt à Dépenser
-logo_image = Image.open('logo_pret_a_depenser.png')
+logo_image = Image.open('Dashboard/logo_pret_a_depenser.png')
 
 
 
