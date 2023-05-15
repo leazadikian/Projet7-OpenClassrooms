@@ -23,13 +23,13 @@ Prêt à dépenser décide donc de développer un **dashboard interactif** pour 
     * prediction_app.py : fichier API de prédiction réalisée avec Fast API. Contient les différents endpoints.
     * model.py : fichier utilisé par prediction_app.py contenant les différentes fonctions.
     * feature_engineering.py : fichier utilisé par model.py des fonctions spécifiquement liées à la transformation des données.
-* Dossier Dashboard : Dossier contenant les fichiers liés au fonctionnement du dashboard. 
-    * Dashboard.py : Tableau de bord réalisé avec le framework Streamlit. Il comprend la partie interface utilisateur qui interagit avec l'API de prédiction.
+* Dossier Dashboard : dossier contenant les fichiers liés au fonctionnement du dashboard. 
+    * Dashboard.py : tableau de bord réalisé avec le framework Streamlit. Il comprend la partie interface utilisateur qui interagit avec l'API de prédiction.
     * setup_streamlit.sh : fichier necessaire au lancement de streamlit. Précise l'option "headless" ainsi que le port d'écoute.
     * logo_pret_a_depenser.png : fichier image logo de la société "Prêt à dépenser"
 * Dossier Data :Dossier contenant les données du projet (Source de données : https://www.kaggle.com/c/home-credit-default-risk/data) 
 * Procfile : Fichier necessaire au déploiement sur Heroku de l'API et du dashboard. Il décrit les processus à exécuter lors du lancement de l'application Heroku.
 * Requirements.txt : Fichier necessaire au déploiement sur Heroku de l'API et du dashboard. Ce fichier contient la liste des  packages requis.
 * runtime.txt : fichier spécifiant à Heroku la version de python à utiliser pour le déploiement. 
-* unit_tests.py : tests unitaires intégré au worklow d'intégration continue
-. data_drift_analysis.hml : rapport au format .html de data drift
+* unit_tests.py : tests unitaires intégrés au worklow d'intégration continue, réalisé avant le déploiement sur Heroku.
+* data_drift_analysis.hml : rapport au format .html de data drift entre les données d'entraînement et les données de production.
