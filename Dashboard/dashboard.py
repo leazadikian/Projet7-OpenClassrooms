@@ -7,17 +7,13 @@ from PIL import Image
 import base64
 
 # Chargement du logo Prêt à Dépenser
-<<<<<<< HEAD
+
 local_path=''
 heroku_path='Dashboard/'
+
 path=heroku_path
 
 logo_image = Image.open(path + 'logo_pret_a_depenser.png')
-=======
-logo_image = Image.open('Dashboard/logo_pret_a_depenser.png')
->>>>>>> a670054891ee72bf8b5e0a1b0a19807d02997849
-
-
 
 #############################
 # FONCTIONS REQUÊTE A L'API #
