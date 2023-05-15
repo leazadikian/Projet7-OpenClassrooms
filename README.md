@@ -19,9 +19,11 @@ Prêt à dépenser décide donc de développer un **dashboard interactif** pour 
 
 **Description des dossiers et fichiers :**
 * Dossier API : Dossier contenant les fichiers liés au focntionnement de l'API de prédiction.
-    * 
+    * fichier prediction_app.py : API de prédiction réalisée avec Fast API. Contient les différents endpoints.
+    * fichier model.py : fichier utilisé par prediction_app.py des différentes traitements.
+    * fichier feature_engineering.py : fichier utilisé par model.py des fonctions liées à la transformation des données.
 * Dossier Dashboard : Dossier contenant les fichiers liés au fonctionnement du dashboard. 
-    * Dashboard.py : Tableau de bord réalisé avec le framework Streamlit. Il comprend la partie interface utilisateur qui interagit avec l'API de rpédiction.
+    * Dashboard.py : Tableau de bord réalisé avec le framework Streamlit. Il comprend la partie interface utilisateur qui interagit avec l'API de prédiction.
     * setup_streamlit.sh : fichier necessaire au lancement de streamlit. Précise l'option "headless" ainsi que le port d'écoute.
     * logo_pret_a_depenser.png : fichier image logo de la société "Prêt à dépenser"
 * Dossier Data :

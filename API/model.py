@@ -15,7 +15,7 @@ api_path ='../API/'
 #     FONCTION DE TRANSFORMATION DES DONNEES      #
 ###################################################
 #train_df_transformed,test_df_transformed=transform_data()
-test_df_transformed=transform_data()
+#test_df_transformed=transform_data()
 
 
 
@@ -30,7 +30,7 @@ def transform(df):
 
 # Chargement des données des clients depuis un fichier CSV
 prod_data = data = pd.read_csv(data_path + "application_test.csv") # base de clients en "production"
-# clients_data = transform(prod_data) # Pour test, data client de test déjà transformées. Pour finaliser le projet il faudra supprimer cet import de données. Ce ddf sera obtenu par transformation de "prod_data" 
+clients_data = transform(prod_data) # Pour test, data client de test déjà transformées. Pour finaliser le projet il faudra supprimer cet import de données. Ce ddf sera obtenu par transformation de "prod_data" 
 clients_data = test_df_transformed # Utiliser cette ligne pour définir clients_data un fois que la fonction de transformation des données fonctionne bien
 
 feats = [f for f in clients_data.columns if f not in ['TARGET','SK_ID_CURR','SK_ID_BUREAU','SK_ID_PREV','index','Unnamed: 0']]
