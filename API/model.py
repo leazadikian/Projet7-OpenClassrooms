@@ -7,45 +7,53 @@ import seaborn as sns
 import pickle
 import io
 import base64
+from feature_engineering import *
 
+data_path="../Data/"
+api_path ='../API/'
 ###################################################
 #     FONCTION DE TRANSFORMATION DES DONNEES      #
 ###################################################
+#train_df_transformed,test_df_transformed=transform_data()
+test_df_transformed=transform_data()
+
+
 
 # Les transformations appliquées aux données d'entrée
 def transform(df):
-    return pd.read_csv("Data/test_df_imputed.csv")
+
+    return pd.read_csv(data_path + "test_df_imputed.csv")
 
 ###################################################
 #       CHARGEMENT DES DONNEES ET DU MODELE       #
 ###################################################
 
 # Chargement des données des clients depuis un fichier CSV
-prod_data = data = pd.read_csv("Data/application_test.csv") # base de clients production
-clients_data = transform(prod_data)
-# Pour test, data client de test déjà transformées. Pour finaliser le projet il faudra supprimer cet import de données. Ce ddf sera obtenu par transformation de "prod_data" 
+prod_data = data = pd.read_csv(data_path + "application_test.csv") # base de clients en "production"
+# clients_data = transform(prod_data) # Pour test, data client de test déjà transformées. Pour finaliser le projet il faudra supprimer cet import de données. Ce ddf sera obtenu par transformation de "prod_data" 
+clients_data = test_df_transformed # Utiliser cette ligne pour définir clients_data un fois que la fonction de transformation des données fonctionne bien
 
 feats = [f for f in clients_data.columns if f not in ['TARGET','SK_ID_CURR','SK_ID_BUREAU','SK_ID_PREV','index','Unnamed: 0']]
 #client_data_wo_id = clients_data[feats]
 
-# Chargement depuis un fichier csv d'un dataframe contenant la description des colonnes
-colmumn_description_df = pd.read_csv("Data/HomeCredit_columns_description.csv", usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')
+# Chargement depuis un fichier .csv d'un dataframe contenant la description des colonnes
+colmumn_description_df = pd.read_csv(data_path + "HomeCredit_columns_description.csv", usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')
 
 # Chargement du modèle MLflow
 #logged_model = 'runs:/b8b6c9ae221242408a65c79dd1f22f11/model'
 #loaded_model = mlflow.pyfunc.load_model(logged_model)
 #loaded_model = mlflow.xgboost.load_model(logged_model)
-loaded_model = pickle.load(open("API/model.pck","rb"))
+loaded_model = pickle.load(open(api_path + "model.pck","rb"))
 
 ###################################################
-# FONCTION D'INFORMATION GENERALES SUR LE DATASET #
+# FONCTIONS D'INFORMATIONS GENERALES SUR LE DATASET #
 ###################################################
 
 # Retourne un dict contenant la description des colonnes
 def features_def():
     return colmumn_description_df.to_dict()
 
-# Retourne la liste des identifiants clients de la base de données
+# Retourne la liste des identifiants clients de la base de données de test
 def clients_id_list():
      #return prod_data['SK_ID_CURR'].tolist() # pour le projet final
     return sorted(clients_data['SK_ID_CURR'].tolist()) # pour les tests
@@ -73,13 +81,13 @@ def client_info(client_id):
     client_info= client_info.fillna('N/A')
     return client_info
 
-# Retourne les saractéristiques du crédit demandé par le client
+# Retourne les caractéristiques du crédit demandé par le client
 def credit_info(client_id):
     credit_info_columns=["NAME_CONTRACT_TYPE","AMT_CREDIT","AMT_ANNUITY","AMT_GOODS_PRICE","REGION_POPULATION_RELATIVE"]
     credit_info=prod_data.loc[prod_data['SK_ID_CURR']==client_id,credit_info_columns].T # informations crédit pour le client selectionné
     return credit_info
 
-# Retourne la prediction sur le client
+# Retourne la prédiction sur le client : probabilité et prédiction 
 def predict (client_id):
     selected_client=clients_data.loc[clients_data['SK_ID_CURR']==client_id]
         
