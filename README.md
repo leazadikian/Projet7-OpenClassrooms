@@ -18,3 +18,12 @@ Prêt à dépenser décide donc de développer un **dashboard interactif** pour 
 * Mettre en production le modèle de scoring de prédiction à l’aide d’une API, ainsi que le dashboard interactif qui appelle l’API pour les prédictions.
 
 **Description des dossiers et fichiers :**
+* Dossier API : 
+* Dossier Dashboard :
+    * Dashboard.py : Tableau de bord réalisé avec le framework Streamlit
+    * setup_streamlit.sh : 
+    * logo_pret_a_depenser.png : fichier image logo de la société "Prêt à dépenser"
+* Dossier Data :
+* Procfile :
+* Requirements.txt : 
+* runtime : 
