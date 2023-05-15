@@ -26,7 +26,9 @@ Prêt à dépenser décide donc de développer un **dashboard interactif** pour 
     * Dashboard.py : Tableau de bord réalisé avec le framework Streamlit. Il comprend la partie interface utilisateur qui interagit avec l'API de prédiction.
     * setup_streamlit.sh : fichier necessaire au lancement de streamlit. Précise l'option "headless" ainsi que le port d'écoute.
     * logo_pret_a_depenser.png : fichier image logo de la société "Prêt à dépenser"
-* Dossier Data :
-* Procfile :
-* Requirements.txt : 
+* Dossier Data :Dossier contenant les données du projet (Source de données : https://www.kaggle.com/c/home-credit-default-risk/data) 
+* Procfile : Fichier necessaire au déploiement sur Heroku de l'API et du dashboard. Il décrit les processus à exécuter lors du lancement de l'application Heroku.
+* Requirements.txt : Fichier necessaire au déploiement sur Heroku de l'API et du dashboard. Ce fichier contient la liste des  packages requis.
 * runtime : 
+* unit_tests.py : tests unitaires intégré au worklow d'intégration continue
+. data_drift_analysis.hml : rapport au format .html de data drift

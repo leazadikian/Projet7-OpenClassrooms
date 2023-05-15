@@ -9,8 +9,8 @@ import io
 import base64
 from feature_engineering import *
 
-data_path="../Data/"
-api_path ='../API/'
+data_path="Data/"  # "../Data/" en local
+api_path ='API/'   #"../API/" en local
 ###################################################
 #     FONCTION DE TRANSFORMATION DES DONNEES      #
 ###################################################
