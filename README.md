@@ -21,6 +21,7 @@ Prêt à dépenser décide donc de développer un **dashboard interactif** pour 
 
 **Description des dossiers et fichiers :**
 * **Notebook** : contient le code de la préparation des données, de l'analyse exploratoire, de la modélisation.
+* **Dossier Data** : dossier contenant les données du projet (Source de données : https://www.kaggle.com/c/home-credit-default-risk/data) 
 * **Dossier API** : ossier contenant les fichiers liés au focntionnement de l'API de prédiction.
     * prediction_app.py : fichier API de prédiction réalisée avec Fast API. Contient les différents endpoints.
     * model.py : fichier utilisé par prediction_app.py contenant les différentes fonctions qui calculent les informations demandées.
@@ -29,7 +30,6 @@ Prêt à dépenser décide donc de développer un **dashboard interactif** pour 
     * Dashboard.py : tableau de bord réalisé avec le framework Streamlit. Il comprend la partie interface utilisateur qui interagit avec l'API de prédiction.
     * setup_streamlit.sh : fichier necessaire au lancement de streamlit. Précise l'option "headless" (mode sans écran) ainsi que le port d'écoute.
     * logo_pret_a_depenser.png : fichier image logo de la société "Prêt à dépenser" utilisé dans le dashboard.
-* **Dossier Data** : dossier contenant les données du projet (Source de données : https://www.kaggle.com/c/home-credit-default-risk/data) 
 * **Procfile** : Fichier necessaire au déploiement sur Heroku de l'API et du dashboard. Il décrit les processus (dyno) à exécuter lors du lancement de l'application Heroku.
 * Requirements.txt : Fichier nécessaire au déploiement sur Heroku de l'API et du dashboard. Ce fichier contient la liste des packages requis pour le projet.
 * **runtime.txt** : fichier spécifiant à Heroku la version de python à utiliser pour le déploiement. 
