@@ -11,39 +11,37 @@ from feature_engineering import *
 
 data_path="Data/"  # "../Data/" en local
 api_path ='API/'   #"../API/" en local
-###################################################
-#     FONCTION DE TRANSFORMATION DES DONNEES      #
-###################################################
-#train_df_transformed,test_df_transformed=transform_data()
-#test_df_transformed=transform_data()
 
-
+#########################################
+#      TRANSFORMATION DES DONNEES      #
+#########################################
 
 # Les transformations appliquées aux données d'entrée
 def transform(df):
+    # return transform_data(df) # L'éxécution de la fonction de transformation des données étant longue (> 10 minutes), nous chargeons directement les données transformées depuis un fichier csv.
+    return pd.read_csv(data_path + "test_df_imputed.csv") 
 
-    return pd.read_csv(data_path + "test_df_imputed.csv")
 
 ###################################################
 #       CHARGEMENT DES DONNEES ET DU MODELE       #
 ###################################################
 
 # Chargement des données des clients depuis un fichier CSV
-prod_data = data = pd.read_csv(data_path + "application_test.csv") # base de clients en "production"
-clients_data = transform(prod_data) # Pour test, data client de test déjà transformées. Pour finaliser le projet il faudra supprimer cet import de données. Ce ddf sera obtenu par transformation de "prod_data" 
-#clients_data = test_df_transformed # Utiliser cette ligne pour définir clients_data un fois que la fonction de transformation des données fonctionne bien
+prod_data = pd.read_csv(data_path + "application_test.csv") # base de clients en "production", nouveaux clients
+clients_data = transform(prod_data) # Transformation des données clients pour utilisation du modèle
 
 feats = [f for f in clients_data.columns if f not in ['TARGET','SK_ID_CURR','SK_ID_BUREAU','SK_ID_PREV','index','Unnamed: 0']]
-#client_data_wo_id = clients_data[feats]
 
 # Chargement depuis un fichier .csv d'un dataframe contenant la description des colonnes
 colmumn_description_df = pd.read_csv(data_path + "HomeCredit_columns_description.csv", usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')
 
 # Chargement du modèle MLflow
-#logged_model = 'runs:/b8b6c9ae221242408a65c79dd1f22f11/model'
-#loaded_model = mlflow.pyfunc.load_model(logged_model)
+#logged_model = 'runs:/b8b6c9ae221242408a65c79dd1f22f11/model' # fonctionne en local avec une instance MLFLow 
+#loaded_model = mlflow.pyfunc.load_model(logged_model) 
 #loaded_model = mlflow.xgboost.load_model(logged_model)
+
 loaded_model = pickle.load(open(api_path + "model.pck","rb"))
+
 
 ###################################################
 # FONCTIONS D'INFORMATIONS GENERALES SUR LE DATASET #
