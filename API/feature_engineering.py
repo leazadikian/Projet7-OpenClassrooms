@@ -9,10 +9,10 @@ import shap
 import matplotlib.pyplot as plt
 import seaborn as sns
 data_path= "../Data/"
-###################################################
+##########################################################################
 #     FONCTIONS DE TRANSFORMATION DES DONNEES
 #  Ce fichier Comporte toutes les fonctions de transformation des données
-###################################################
+##########################################################################
 
 
 
@@ -26,18 +26,10 @@ def transform_data():
     with timer("Feature engineering"):
         df=feature_engineering(num_rows=None) 
     # preprocessing : imputation des valeurs manquantes, ttt du déséquilibre de classe avec SMOTE
-    #with timer("préprocessing"):
-     #   train_df_imputed,test_df_imputed=preprocessing(df)
-        print("ecriture des csv")
-        df.sample(10).to_csv("df_with_feat_engin_fromAPI.csv")
-      #  train_df_imputed.sample(10).to_csv("train_df_imputed_fromAPI.csv")
-       # test_df_imputed.sample(10).to_csv("test_df_imputed_fromAPI.csv")
-
-    #return train_df_imputed,test_df_imputed
-    return df
-
-
-
+    with timer("préprocessing"):
+        train_df_imputed,test_df_imputed=preprocessing(df)
+        
+    return test_df_imputed
 
 
 # Les transformations appliquées aux données d'entrée
@@ -354,7 +346,7 @@ def missing_values_imputation(df) :
     
     # Imputation des valeurs manquantes par la moyenne
     train_df_imputed=train_df.fillna(train_df.mean())
-    test_df_imputed=train_df.fillna(train_df.mean())
+    test_df_imputed=test_df.fillna(test_df.mean())
 
     
     # Taux de valeurs manquantes :
