@@ -35,3 +35,7 @@ Prêt à dépenser décide donc de développer un **dashboard interactif** pour 
 * **runtime.txt** : fichier spécifiant à Heroku la version de python à utiliser pour le déploiement. 
 * **unit_tests.py** : tests unitaires intégrés au worklow d'intégration continue, réalisé avant le déploiement sur Heroku.
 * **data_drift_analysis.hml** : rapport au format .html de data drift entre les données d'entraînement et les données de "production".
+
+**Vidéo de démonstration du Dashboard**
+https://youtu.be/kFvpCSkKjQY
+[![Video dashboard](https://img.youtube.com/vi/kFvpCSkKjQY/mqdefault.jpg)](https://www.youtube.com/watch?v=kFvpCSkKjQY)
