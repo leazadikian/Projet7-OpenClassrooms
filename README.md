@@ -37,5 +37,5 @@ Prêt à dépenser décide donc de développer un **dashboard interactif** pour 
 * **data_drift_analysis.hml** : rapport au format .html de data drift entre les données d'entraînement et les données de "production".
 
 **Vidéo de démonstration du Dashboard**
-https://youtu.be/kFvpCSkKjQY
+
 [![Video dashboard](https://img.youtube.com/vi/kFvpCSkKjQY/mqdefault.jpg)](https://www.youtube.com/watch?v=kFvpCSkKjQY)
