@@ -81,7 +81,7 @@ def client_info(client_id):
 
 # Retourne les caractéristiques du crédit demandé par le client
 def credit_info(client_id):
-    credit_info_columns=["NAME_CONTRACT_TYPE","AMT_CREDIT","AMT_ANNUITY","AMT_GOODS_PRICE","REGION_POPULATION_RELATIVE"]
+    credit_info_columns=["NAME_CONTRACT_TYPE","AMT_CREDIT","AMT_ANNUITY","AMT_GOODS_PRICE"]
     credit_info=prod_data.loc[prod_data['SK_ID_CURR']==client_id,credit_info_columns].T # informations crédit pour le client selectionné
     return credit_info
 
